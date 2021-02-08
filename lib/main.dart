@@ -6,11 +6,12 @@ import 'package:quoteapp/category.dart';
 
 void main() {
   runApp(MaterialApp(
-    initialRoute: '/category',
+    initialRoute: '/',
     routes: {
       '/': (context) => LoadingScreen() ,
       '/home':(context) =>QuoteDisplay(),
-      '/category':(context) =>Category(),
+      '/load_categories':(context) => LoadingCategories(),
+      '/categories':(context) =>Category(),
     },
   ));
 

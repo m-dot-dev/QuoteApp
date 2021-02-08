@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+
 
 class Quote {
   String quoteText;
@@ -121,39 +123,71 @@ class _QuoteDisplay extends State<QuoteDisplay> {
   @override
   Widget build(BuildContext context){
 
-    quotedata = ModalRoute.of(context).settings.arguments;
+    quotedata = quotedata==null ? ModalRoute.of(context).settings.arguments:quotedata;
     String str ='';
 
-    Quote quote = new Quote(quoteText: quotedata['content'],image: 'assets/unknown.jpg',author: quotedata['author'],tag: quotedata['tags'].map((tag) => tag+str).toString());
+    Quote quote = new Quote(quoteText: quotedata['content'],image: quotedata['image'],author: quotedata['author'],tag: quotedata['tags'].map((tag) => tag+str).toString());
 
     return Container(
       decoration: BoxDecoration(
         image: DecorationImage(
           image: NetworkImage(
-             quotedata['image'],
+            quotedata['image'],
           ),
           fit: BoxFit.cover,
         ),
       ),
       child: Scaffold(
         backgroundColor: Colors.transparent,
-        // appBar: AppBar(
-        //   backgroundColor: Colors.grey[800],
-        //   shadowColor: Colors.transparent,
-        //   title: Text(
-        //     "Different Quotes".toUpperCase(),
-        //     style: TextStyle(
-        //       fontFamily: "IndieFlower",
-        //       fontSize: 30.0,
-        //       color: Colors.white,
-        //     ),
-        //   ),
-        //   centerTitle: true,
-        // ),
         body: SafeArea(
-          child: Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: QuoteCardMaker(quote: quote)
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(child: SizedBox(height: 5,)),
+              Expanded(
+                flex: 1,
+                  child: Padding(
+                    padding: EdgeInsets.fromLTRB(40, 0, 0, 0),
+                    child:  FlatButton.icon(
+
+                      padding: EdgeInsets.all(7),
+                        onPressed: ()async{
+                            dynamic returned = await Navigator.pushNamed(context, '/load_categories');
+                            try{
+                              setState(() {
+                                quotedata = {
+                                  'content':returned['content'],
+                                  'image':returned['image'],
+                                  'author':returned['author'],
+                                  'tags':returned['tags'],
+                                };
+                              });
+                            }catch(e){}
+
+                        },
+                        icon: Icon(
+                            Icons.category,
+                        ),
+                        label: Text(
+                          'Categories',
+                          style:TextStyle(
+                            color: Colors.white
+                          ),
+
+                        ),
+
+                        color: Colors.blueGrey.withOpacity(0.55)
+                    ),
+                  )
+              ),
+              Expanded(
+                flex: 20,
+                child: Padding(
+                    padding: const EdgeInsets.fromLTRB(20.0,2.0,20.0,20.0),
+                    child: QuoteCardMaker(quote: quote)
+                ),
+              ),
+            ],
           ),
         ),
         floatingActionButton: FloatingActionButton(
@@ -173,6 +207,7 @@ class _QuoteDisplay extends State<QuoteDisplay> {
       ),
     );
   }
+
 
 }
 

@@ -10,14 +10,13 @@ class LoadingScreen extends StatefulWidget {
 
 class _LoadingScreenState extends State<LoadingScreen> {
   Future<void> getData() async{
-
       Response response;
       Map data;
       response = await get('https://api.quotable.io/random');
       data = jsonDecode(response.body);
       response = await get('https://api.unsplash.com/photos/random/?collections=151521?&client_id=Ul-qaLX1UyFLlgtquzfaKkrtrigQnxC7_lyizWj7SBE');
       try {
-        data['image'] = jsonDecode(response.body)['urls']['regular'];
+        data['image'] =jsonDecode(response.body)['urls']['regular'];
       }catch(e){
         data['image'] = 'https://th.bing.com/th/id/OIP.glyJhf2YbvvUG5nzUT4QWwDOEs?pid=Api&rs=1';
       }
@@ -28,9 +27,11 @@ class _LoadingScreenState extends State<LoadingScreen> {
         data['image'] = 'https://cdn1.iconfinder.com/data/icons/web-notifications-2/64/14._something_went_wrong_cross_crucifix_octagonal-512.png';
         data['tags'] = ['(-.-)'];
       }
-      Navigator.pushReplacementNamed(context, '/home',arguments: data);
 
+      Navigator.pushReplacementNamed(context, '/home',arguments: data);
   }
+
+
   @override
   void initState() {
 
@@ -54,6 +55,53 @@ class _LoadingScreenState extends State<LoadingScreen> {
           ),
         ),
       )
+    );
+  }
+}
+
+class LoadingCategories extends StatefulWidget {
+  @override
+  _LoadingCategoriesState createState() => _LoadingCategoriesState();
+}
+
+class _LoadingCategoriesState extends State<LoadingCategories> {
+
+  @override
+  void initState() {
+    super.initState();
+    getCategories();
+  }
+
+  Future<void> getCategories() async{
+    Response response = await get('https://api.quotable.io/tags');
+    List data = jsonDecode(response.body);
+    List<String> tags = ['random'];
+    data.forEach((element) {
+      String str = element.toString();
+      int startIndex = str.indexOf('name: ')+6;
+      int endIndex = str.indexOf(', __');
+      tags.add(str.substring(startIndex,endIndex));
+    });
+    dynamic returned = await Navigator.pushNamed(context, '/categories',arguments: tags);
+
+    Navigator.pop(context,returned);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        backgroundColor: Colors.blueAccent[700],
+        body: SafeArea(
+        child: Padding(
+        padding: EdgeInsets.all(20.0),
+          child: Center(
+          child: SpinKitCircle(
+          color: Colors.white,
+          size: 100.0,
+          )
+        ),
+      ),
+    )
     );
   }
 }
