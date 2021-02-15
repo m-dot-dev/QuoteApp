@@ -10,6 +10,7 @@ void main() {
     routes: {
       '/': (context) => LoadingScreen() ,
       '/home':(context) =>QuoteDisplay(),
+      '/blankload':(context) => LoadingBlank(),
       '/load_categories':(context) => LoadingCategories(),
       '/categories':(context) =>Category(),
     },

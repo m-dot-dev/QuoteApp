@@ -161,6 +161,7 @@ class _QuoteDisplay extends State<QuoteDisplay> {
                                   'author':returned['author'],
                                   'tags':returned['tags'],
                                 };
+
                               });
                             }catch(e){}
 

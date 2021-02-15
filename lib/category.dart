@@ -4,10 +4,14 @@ import 'package:http/http.dart';
 import 'dart:convert';
 
 
-class Category extends StatelessWidget {
+class Category extends StatefulWidget {
 
+  @override
+  _CategoryState createState() => _CategoryState();
+}
+
+class _CategoryState extends State<Category> {
   List<String> categories;
-
   @override
   Widget build(BuildContext context) {
     categories = ModalRoute.of(context).settings.arguments;
@@ -26,7 +30,7 @@ class Category extends StatelessWidget {
               child: ListTile(
                 tileColor: Colors.grey.withOpacity(0.55),
                 onTap: () async{
-
+                  Navigator.pushNamed(context,'/blankload');
                   Response response;
                   Map data;
                   String quotetag = categories[index]=='random' ? '':categories[index];
@@ -45,10 +49,10 @@ class Category extends StatelessWidget {
                     data['image'] = 'https://cdn1.iconfinder.com/data/icons/web-notifications-2/64/14._something_went_wrong_cross_crucifix_octagonal-512.png';
                     data['tags'] = ['(-.-)'];
                   }
-
+                  Navigator.of(context).pop();
                   Navigator.pop(context, data);
-
                 },
+
                 focusColor: Colors.indigo,
                 hoverColor: Colors.teal,
                 title: Padding(
@@ -62,7 +66,6 @@ class Category extends StatelessWidget {
       ),
     );
     }
+
   }
-
-
 }
